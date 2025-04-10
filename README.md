@@ -15,18 +15,29 @@ This should activate the extension.
 ```bash 
 cd backend
 ```
-3. Run Docker build.
+3. Run Docker Compose.
 ```bash
-docker build -t hci-backend-image .
+docker compose create
 ```
 4. Run Docker Container.
 ```bash
-docker run -d -p 8000:8000 hci-backend-image
+docker compose start
 ```
 5. Verify that the container is running.
 ```bash
 docker ps
 ```
 
-## How to Find Local Storage (Deprecated)
-Navigate to Whatsapp with the Chrome extension downloaded. Using Chrome's menu, go to More Tools > Developer Tools. On the top bar, click "Application." On the left, do the dropdown for "Local Storage." Here, you should see one sub-category for whatsapp web. Click this, scroll all the way down, and our chats are saved under "whatsapp_chats."
+
+## Text Moderation 
+1. Create a file `backend/.env`
+2. Add `OPENAI_API_KEY` to the .env file.
+3. Setup dependencies.
+```bash
+uv sync
+source .venv/bin/activate
+```
+4. Run cron.py.
+```bash
+uv run cron.py
+```
