@@ -7,3 +7,4 @@ class Message(BaseModel):
     data_id: str
     id: str
     chat_name: str
+    date_time: str

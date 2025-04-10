@@ -1,9 +1,24 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
+from contextlib import asynccontextmanager
 from fastapi.middleware.cors import CORSMiddleware
 from .models.message import Message
-from .models.saved_chats import saved_chats
+from .db import collection, client
+from pymongo.errors import ServerSelectionTimeoutError
+from datetime import datetime
 
-app = FastAPI()
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    try:
+        await client.admin.command("ping")
+        print("✔ MongoDB connection successful")
+    except ServerSelectionTimeoutError as e:
+        print({"error": "Could not connect to MongoDB", "details": str(e)})
+
+    yield
+
+
+app = FastAPI(lifespan=lifespan)
 
 origins = ["https://web.whatsapp.com", "http://localhost"]
 
@@ -15,6 +30,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
 @app.get("/ping/")
 async def ping():
     return {"message": "pong"}
@@ -22,5 +38,22 @@ async def ping():
 
 @app.post("/messages/")
 async def add_message(message: Message):
-    saved_chats.add_message(message)
-    return {"message": "message saved"}
+    msg = await collection.find_one({"_id": message.id})
+    if msg is None:
+        try:
+            await collection.insert_one(
+                {
+                    "_id": message.id,
+                    "content": message.text,
+                    "sender": message.sender,
+                    "data_id": message.data_id,
+                    "chat_name": message.chat_name,
+                    "date_time": datetime.fromisoformat(message.date_time),
+                    # "evaluated": False
+                }
+            )
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=e)
+        return {"message": "message saved"}
+    else:
+        return {"message": "message already exists"}
