@@ -98,6 +98,11 @@ async def main():
     user_report = await generate_moderation_report(user_texts)
     suspect_report = await generate_moderation_report(suspect_texts)
 
+    if user_report.flagged or suspect_report.flagged:
+        await collection.update_one(
+            filter={"_id": "trigger_popup"}, update={"$set": {"value": True}}
+        )
+
     if user_report.flagged:
         triggered_flags = [k for (k, v) in user_report.model_dump().items() if v]
         response = await openai_client.chat.completions.create(

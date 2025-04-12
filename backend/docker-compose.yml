@@ -13,8 +13,8 @@ services:
     container_name: mongo_container
     ports:
       - "27017:27017"
-    volumes:
-      - mongo_data:/data/db
+#     volumes:
+#       - mongo_data:/data/db
 
-volumes:
-  mongo_data:
+# volumes:
+#   mongo_data:
