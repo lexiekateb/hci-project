@@ -27,9 +27,9 @@ function monitorMessages() {
   }
 
   const observer = new MutationObserver(() => {
-    const allowedChatNames = ["Rohit Chaudhari","Lexie HCI Group Project"];
+    const allowedChatNames = ["Rohit Chaudhari", "Lexie HCI Group Project"];
     const chatName = getChatName();
-    if (!chatName ||  !allowedChatNames.includes(chatName)) return; // Restricts the chats we want to download. 
+    if (!chatName || !allowedChatNames.includes(chatName)) return; // Restricts the chats we want to download.
 
     const messageContainers = document.querySelectorAll(
       "div.message-in, div.message-out"
@@ -43,9 +43,14 @@ function monitorMessages() {
 
       // Finding the time the message was sent at
       const time_sender_data_div = container.querySelector("div.copyable-text");
-      if(!time_sender_data_div) return; // div not detected
-      const time_sender_data = time_sender_data_div.getAttribute("data-pre-plain-text");
-      const datetime_string = time_sender_data.slice(time_sender_data.indexOf("[") + 1, time_sender_data.indexOf("]"));
+      if (!time_sender_data_div) return; // div not detected
+      const time_sender_data = time_sender_data_div.getAttribute(
+        "data-pre-plain-text"
+      );
+      const datetime_string = time_sender_data.slice(
+        time_sender_data.indexOf("[") + 1,
+        time_sender_data.indexOf("]")
+      );
       const parsedDate = new Date(datetime_string);
       const isoString = parsedDate.toISOString();
 
@@ -59,22 +64,23 @@ function monitorMessages() {
         : chatName;
 
       // This sends the messages to backend for storage
-      fetch("http://127.0.0.1:8000/messages/",{
-        method: 'POST',
+      fetch("http://127.0.0.1:8000/messages/", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
-              sender,
-              text,
-              data_id,
-              id: message_id,
-              chat_name: chatName,
-              date_time: isoString,
-            })
-      }).then(response => response.json())
-      .then(data => console.log(data))
-      .catch(error => console.error(error));
+          sender,
+          text,
+          data_id,
+          id: message_id,
+          chat_name: chatName,
+          date_time: isoString,
+        }),
+      })
+        .then((response) => response.json())
+        // .then((data) => console.log(data))
+        .catch((error) => console.error(error));
     });
   });
 
@@ -96,6 +102,7 @@ function monitorMessages() {
             subtree: true,
           });
           console.log("chat monitor is active");
+          setInterval(pollServerForPopupTrigger,3000);
         }
       })
       .catch((error) => {
@@ -111,3 +118,19 @@ function monitorMessages() {
 window.addEventListener("load", () => {
   setTimeout(monitorMessages, 5000); // add timeout to let whatsapp page load
 });
+
+async function pollServerForPopupTrigger() {
+  fetch("http://127.0.0.1:8000/popup_trigger/")
+    .then((response) => {
+      // Check if response is OK (status 200-299)
+      if (!response.ok) {
+        throw new Error("Backend response was not ok");
+      }
+      return response.json();
+    })
+    .then((data) => {
+      if (data.trigger_popup) {
+        console.log(data.trigger_popup); // replace this with logic to trigger the popup
+      }
+    });
+}

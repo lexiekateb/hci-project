@@ -12,6 +12,7 @@ async def lifespan(app: FastAPI):
     try:
         await client.admin.command("ping")
         print("✔ MongoDB connection successful")
+        await collection.insert_one({"_id": "trigger_popup", "value": False})
     except ServerSelectionTimeoutError as e:
         print({"error": "Could not connect to MongoDB", "details": str(e)})
 
@@ -49,7 +50,7 @@ async def add_message(message: Message):
                     "data_id": message.data_id,
                     "chat_name": message.chat_name,
                     "date_time": datetime.fromisoformat(message.date_time),
-                    # "evaluated": False
+                    # "evaluated": False,
                 }
             )
         except Exception as e:
@@ -57,3 +58,19 @@ async def add_message(message: Message):
         return {"message": "message saved"}
     else:
         return {"message": "message already exists"}
+
+
+@app.get("/popup_trigger/")
+async def popup_trigger():
+    try:
+        result = await collection.find_one(filter={"_id": "trigger_popup"})
+        if result:
+            flag = result["value"]
+            if flag:
+                await collection.update_one(
+                    filter={"_id": "trigger_popup"}, update={"$set": {"value": False}}
+                )
+
+        return {"trigger_popup": flag}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=e)
