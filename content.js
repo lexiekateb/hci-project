@@ -130,7 +130,123 @@ async function pollServerForPopupTrigger() {
     })
     .then((data) => {
       if (data.trigger_popup) {
-        console.log(data.trigger_popup); // replace this with logic to trigger the popup
+        console.log("dangerous content detected; trigger popup");
+        showPopup();
+      }
+      else {
+        console.log("no popup trigger");
       }
     });
+}
+
+function showPopup() {
+  if (document.getElementById("danger-popup")) return;  // if the popup is already on screen, don't show again
+
+  const style = document.createElement("style");
+  style.textContent = `
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .popup-overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(5px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
+
+    .popup-box {
+      background: white;
+      border-radius: 20px;
+      padding: 40px 60px;
+      max-width: 500px;
+      text-align: center;
+      position: relative;
+      animation: fadeIn 0.3s ease-out forwards;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    .popup-box h2 {
+      margin-bottom: 15px;
+      color: #c0392b;
+      font-size: 24px;
+    }
+
+    .popup-box p {
+      font-size: 18px;
+      margin-bottom: 30px;
+      color: #333;
+    }
+
+    .countdown-circle {
+      width: 100px;
+      height: 100px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    .countdown-circle text {
+      fill: #c0392b;
+      font-size: 18px;
+      font-weight: bold;
+      text-anchor: middle;
+      dominant-baseline: middle;
+    }
+  `;
+  document.head.appendChild(style);
+
+  const overlay = document.createElement("div");
+  overlay.className = "popup-overlay";
+  overlay.id = "danger-popup";
+
+  overlay.innerHTML = `
+    <div class="popup-box">
+      <h2>⚠️ Dangerous Content Detected</h2>
+      <p>Please notify a parent or trusted adult immediately.</p>
+      <div class="countdown-circle">
+        <svg width="100" height="100">
+          <g transform="rotate(-90 50 50)">
+            <circle cx="50" cy="50" r="45" stroke="#e0e0e0" stroke-width="8" fill="none"/>
+            <circle id="progress-circle" cx="50" cy="50" r="45" stroke="#e74c3c" stroke-width="8" fill="none"
+              stroke-dasharray="282.743" stroke-dashoffset="0"/>
+          </g>
+          <text x="50" y="50" id="countdown-text">10</text>
+        </svg>
+      </div>
+
+
+    </div>
+  `;
+
+  document.body.appendChild(overlay);
+
+  // code to animate the countdown circle thing
+  const duration = 10; // sec; change this to change the countdown duration
+  let timeLeft = duration;
+  const textEl = document.getElementById("countdown-text");
+  const circle = document.getElementById("progress-circle");
+  const radius = 45;
+  const circumference = 2 * Math.PI * radius;
+
+  circle.style.strokeDasharray = circumference;
+  circle.style.strokeDashoffset = 0;
+
+  const interval = setInterval(() => {
+    timeLeft--;
+    const offset = circumference - (timeLeft / duration) * circumference;
+    circle.style.strokeDashoffset = offset;
+    textEl.textContent = timeLeft;
+
+    if (timeLeft <= 0) {    // once time is up, stop the interval from repeating
+      clearInterval(interval);
+      overlay.remove();
+    }
+  }, 1000);
 }
