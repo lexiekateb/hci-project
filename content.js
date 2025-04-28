@@ -144,6 +144,9 @@ function showPopup() {
 
   const style = document.createElement("style");
   style.textContent = `
+
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
     @keyframes fadeIn {
       from { opacity: 0; transform: scale(0.95); }
       to { opacity: 1; transform: scale(1); }
@@ -170,7 +173,7 @@ function showPopup() {
       position: relative;
       animation: fadeIn 0.3s ease-out forwards;
       box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-      font-family: 'Segoe UI', sans-serif;
+      font-family: 'Montserrat', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
 
     .popup-box h2 {

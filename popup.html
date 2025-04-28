@@ -1,11 +1,169 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>HCI Project</title>
+  <title>Chat Monitor</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+    html, body {
+      width: 320px;
+      height: 460px;
+      margin: 0;
+      padding: 0;
+      background-color: #f1f3f4;
+      font-family: 'Montserrat', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      padding: 12px;
+      box-sizing: border-box;
+    }
+
+    .wrapper {
+      padding: 15px;
+    }
+    
+    .container {
+      background-color: white;
+      border-radius: 16px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      padding: 5px;
+    }
+    
+    .header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    
+    .header h2 {
+      color: #6c5ce7;
+      margin: 0;
+      font-size: 22px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+    
+    .logo {
+      text-align: center;
+      margin-bottom: 15px;
+    }
+    
+    .logo-icon {
+      font-size: 40px;
+      color: #6c5ce7;
+    }
+    
+    .card {
+      background-color: white;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      padding: 20px;
+      margin-bottom: 15px;
+      transition: transform 0.2s;
+    }
+    
+    .card:hover {
+      transform: translateY(-2px);
+    }
+    
+    .status-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    
+    .status-label {
+      font-weight: 500;
+      color: #333;
+      font-size: 15px;
+    }
+    
+    .status-indicator {
+      display: flex;
+      align-items: center;
+      padding: 6px 12px;
+      border-radius: 20px;
+    }
+    
+    .status-indicator.online {
+      background-color: rgba(46, 213, 115, 0.1);
+    }
+    
+    .status-indicator.offline {
+      background-color: rgba(235, 77, 75, 0.1);
+    }
+    
+    .status-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      margin-right: 8px;
+    }
+    
+    .status-dot.online {
+      background-color: #2ed573;
+    }
+    
+    .status-dot.offline {
+      background-color: #eb4d4b;
+    }
+    
+    .status-text {
+      font-weight: 600;
+      font-size: 14px;
+    }
+    
+    .status-text.online {
+      color: #2ed573;
+    }
+    
+    .status-text.offline {
+      color: #eb4d4b;
+    }
+    
+    .info-text {
+      color: #666;
+      font-size: 14px;
+      line-height: 1.5;
+      text-align: center;
+      margin: 0;
+    }
+    
+    .footer {
+      text-align: center;
+      font-size: 12px;
+      color: #999;
+      margin-top: 5px;
+      padding: 10px;
+    }
+  </style>
 </head>
 <body>
-  <h3>Chat Monitor</h3>
-  <p>the extension is working</p>
-  <p>TODO update this to look good</p>
+  <div class="container">
+    <div class="wrapper">
+      <div class="header">
+        <h2>Chat Monitor</h2>
+      </div>
+      
+      <div class="card">
+        <div class="status-container">
+          <span class="status-label">Monitor Status</span>
+          <div class="status-indicator online" id="status-indicator">
+            <span class="status-dot online" id="status-dot"></span>
+            <span class="status-text online" id="status-text">Active</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="card">
+        <p class="info-text">This extension monitors WhatsApp conversations and helps protect children from potentially harmful content.</p>
+      </div>
+      
+      <div class="footer">
+        <p>HCI Child Safety Project</p>
+      </div>
+    </div>
+  </div>
 </body>
 </html>
