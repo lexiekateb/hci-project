@@ -25,6 +25,8 @@ source .venv/bin/activate
 ```bash
 OPENAI_API_KEY="<your-api-key>"
 GOOGLE_APP_PASSWORD="<your-google-app-password>"
+SENDER_EMAIL="<your-email>"
+RECEIVER_EMAIL="<receiver-email>"
 ```
 4. Run the server.
 ```bash

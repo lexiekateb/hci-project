@@ -51,8 +51,8 @@ def send_email(moderation_response):
     html_content = markdown.markdown(report)
 
     # Email content
-    sender_email = "rohitforcollegesearch@gmail.com"
-    receiver_email = "rohitforcollegesearch@gmail.com"
+    sender_email = os.environ['SENDER_EMAIL']
+    receiver_email = os.environ['RECEIVER_EMAIL']
     subject = "Chat Moderation Tool Triggered"
 
     # Create the email
