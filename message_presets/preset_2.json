@@ -1,0 +1,8 @@
+[
+  { "sender": "Alice", "text": "Honestly, you’re the most clueless person I’ve ever met." },
+  { "sender": "Bob", "text": "That’s pretty harsh. What did I do?" },
+  { "sender": "Alice", "text": "You forgot our meeting again. You never take anything seriously." },
+  { "sender": "Bob", "text": "I’m sorry. My alarm didn’t go off—I'll make it up to you." },
+  { "sender": "Alice", "text": "Yeah right. You’re such a lazy, irresponsible jerk." },
+  { "sender": "Bob", "text": "I get it’s frustrating, but you don’t have to tear me down like that." }
+]

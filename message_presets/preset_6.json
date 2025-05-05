@@ -1,0 +1,8 @@
+[
+    { "sender": "Alice", "text": "Bob, you’re such a bright kid, I’m impressed by how mature you are." },
+    { "sender": "Bob", "text": "Thanks, Alice. I really admire you too." },
+    { "sender": "Alice", "text": "You know, next time we hang out, maybe we could talk about some secrets—things you wouldn’t tell anyone else." },
+    { "sender": "Bob", "text": "Really? Like what kind of secrets?" },
+    { "sender": "Alice", "text": "Oh, just little things. Maybe I could give you a gift if you share something special with me." },
+    { "sender": "Bob", "text": "I’m excited. I’ve never felt this close to someone before." }
+  ]

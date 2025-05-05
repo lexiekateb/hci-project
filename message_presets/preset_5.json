@@ -1,0 +1,8 @@
+[
+    { "sender": "Alice", "text": "Bob, I’ve heard you’ve been spreading lies about me at work." },
+    { "sender": "Bob", "text": "Alice, I don’t know what you’re talking about—this is a misunderstanding." },
+    { "sender": "Alice", "text": "Save it. If I catch you whispering a single word about me again, I’ll make sure you pay for it." },
+    { "sender": "Bob", "text": "Please, there’s no need to escalate—let’s just talk this through." },
+    { "sender": "Alice", "text": "Talking is over. Consider this your one and only warning." },
+    { "sender": "Bob", "text": "Alright, I understand. You won’t hear a peep out of me." }
+  ]
