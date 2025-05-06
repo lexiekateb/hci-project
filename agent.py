@@ -16,10 +16,10 @@ functions = [
                     "type": "object",
                     "description": "Boolean indicators for detected unsafe content categories.",
                     "properties": {
-                        "violence": {
-                            "type": "boolean",
-                            "description": "Violent content present.",
-                        },
+                        # "violence": {
+                        #     "type": "boolean",
+                        #     "description": "Violent content present.",
+                        # },
                         "self_harm": {
                             "type": "boolean",
                             "description": "Self-harm content present.",
@@ -40,14 +40,19 @@ functions = [
                             "type": "boolean",
                             "description": "Threatening content present.",
                         },
+                        "drug_use": {
+                            "type": "boolean",
+                            "description": "Content about drug use present.",
+                        },
                     },
                     "required": [
-                        "violence",
+                        # "violence",
                         "self_harm",
                         "harassment",
-                        "sexual_content",
+                        # "sexual_content",
                         "grooming",
                         "threatening",
+                        "drug_use"
                     ],
                 },
                 "excerpts": {
@@ -86,7 +91,7 @@ def moderate_text(conversation):
             "role": "system",
             "content": (
                 "You are a content-safety classification agent. "
-                "Analyze the entire chat conversation and identify any instances of violence, self-harm, "
+                "Analyze the entire chat conversation and identify any instances of drug use, self-harm, "
                 "harassment, sexual content (including minors), or grooming. "
                 "Return exactly one function call with the schema provided."
             ),
@@ -124,7 +129,7 @@ def moderate_text(conversation):
     }
 
 
-def generate_parent_report(moderation_response):
+def generate_parent_report(moderation_response,conversation_partner):
 
     system_prompt = (
         "You are a compassionate counselor writing a report to a child's parents. "
@@ -141,7 +146,7 @@ def generate_parent_report(moderation_response):
 
     user_prompt = (
         f"Child’s Name: Bob\n"
-        f"Conversation Partner: Alice\n\n"
+        f"Conversation Partner: {conversation_partner}\n\n"
         f"Classification Data:\n{json.dumps(moderation_response, indent=2)}"
     )
 
