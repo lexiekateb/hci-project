@@ -13,9 +13,13 @@ from email.mime.multipart import MIMEMultipart
 import os
 
 app = FastAPI()
+
+
+origins = ["https://web.whatsapp.com", "http://localhost"]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -25,7 +29,12 @@ app.add_middleware(
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
 
-@app.get("/")
+@app.get("/api/ping/")
+async def ping():
+    return {"message": "pong"}
+
+
+@app.get("/home")
 async def home():
     return FileResponse("static/chat.html")
 
@@ -46,13 +55,13 @@ class Conversation(BaseModel):
     conversation: List[Message]
 
 
-def send_email(moderation_response):
-    report = generate_parent_report(moderation_response)
+def send_email(moderation_response, conversation_partner):
+    report = generate_parent_report(moderation_response, conversation_partner)
     html_content = markdown.markdown(report)
 
     # Email content
-    sender_email = os.environ['SENDER_EMAIL']
-    receiver_email = os.environ['RECEIVER_EMAIL']
+    sender_email = os.environ["SENDER_EMAIL"]
+    receiver_email = os.environ["RECEIVER_EMAIL"]
     subject = "Chat Moderation Tool Triggered"
 
     # Create the email
@@ -76,11 +85,17 @@ def send_email(moderation_response):
 @app.post("/api/messages/")
 async def send_messages(conversation: Conversation, background_tasks: BackgroundTasks):
     conversation_dict = conversation.model_dump().get("conversation")
+
+    conversation_partner = set()
+    for turn in conversation_dict:
+        conversation_partner.add(turn["sender"])
+    conversation_partner ^= set("Bob")
+
     moderation_response = moderate_text(conversation_dict)
     conversation_flagged = False
     for _, value in moderation_response["flags"].items():
         conversation_flagged |= value
 
     if conversation_flagged:
-        background_tasks.add_task(send_email, moderation_response)
+        background_tasks.add_task(send_email, moderation_response, conversation_partner)
     return {"conversation_flagged": conversation_flagged}

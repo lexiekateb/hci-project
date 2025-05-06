@@ -7,7 +7,8 @@
     "activeTab"
   ],
   "host_permissions": [
-    "http://127.0.0.1:8000/*"
+    "http://127.0.0.1:8000/*",
+    "https://web.whatsapp.com/*"
   ],
   "content_scripts": [
     {
@@ -18,6 +19,14 @@
         "content.js"
       ],
       "run_at": "document_idle"
+    },
+    {
+      "matches": [
+        "https://web.whatsapp.com/*"
+      ],
+      "js": [
+        "contentWhatsapp.js"
+      ]
     }
   ],
   "action": {
