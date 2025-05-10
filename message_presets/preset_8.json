@@ -1,0 +1,10 @@
+[
+    { "sender": "Alice", "text": "Hey Bob, did you finish your math homework?" },
+    { "sender": "Bob",   "text": "Almost—just need to double-check question 5." },
+    { "sender": "Alice", "text": "Cool. Want to study together at the library later?" },
+    { "sender": "Bob",   "text": "Sounds good! I’ll bring some snacks." },
+    { "sender": "Alice", "text": "Perfect. I could use a coffee, too ☕️" },
+    { "sender": "Bob",   "text": "Nice. See you at 4 PM by the main entrance." },
+    { "sender": "Alice", "text": "See you then! Don’t forget your calculator." },
+    { "sender": "Bob",   "text": "Got it. Have a great class until then!" }
+  ]

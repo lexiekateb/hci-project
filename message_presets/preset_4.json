@@ -1,0 +1,8 @@
+[
+    { "sender": "Alice", "text": "Hey Bob, did you see the news about the fight at the park?" },
+    { "sender": "Bob", "text": "Yeah, it was wild. Two guys started shoving each other over nothing." },
+    { "sender": "Alice", "text": "I heard one of them pulled out a knife." },
+    { "sender": "Bob", "text": "He slashed the guy’s arm—blood sprayed everywhere." },
+    { "sender": "Alice", "text": "That’s horrifying. Someone called 911, right?" },
+    { "sender": "Bob", "text": "Police arrived minutes later and cuffed the attacker. Poor guy needed stitches." }
+  ]

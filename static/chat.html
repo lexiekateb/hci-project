@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chat App</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        .chat-container {
+            display: flex;
+            height: 100vh;
+        }
+
+        .sidebar {
+            width: 25%;
+            background: #f0f0f0;
+            border-right: 1px solid #ccc;
+            padding: 20px;
+        }
+
+        .chat-main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            background: white;
+        }
+
+        .message {
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 8px;
+            max-width: 60%;
+            background: #e0f7ff;
+        }
+
+        .message.bob {
+            margin-left: auto;
+            background: #d1ffd6;
+        }
+
+        .chat-input-wrappper {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-evenly;
+        }
+
+        .chat-input {
+            display: flex;
+            padding: 15px;
+            border-top: 1px solid #ccc;
+            background: #f9f9f9;
+            width: 100%;
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #aaa;
+            border-radius: 4px;
+        }
+
+        .chat-input button {
+            margin-left: 10px;
+            padding: 10px 16px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .chat-input button:hover {
+            background: #0056b3;
+        }
+
+        .sidebar_list {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar_list_item {
+            background-color: gray;
+            border-radius: 5px;
+            padding: 5px;
+            margin-bottom: 5px;
+            color: white;
+            cursor: pointer;
+        }
+
+        .sidebar_list_item:hover {
+            background-color: lightgray;
+        }
+
+        .sidebar_list_item:active {
+            background-color: darkgray;
+        }
+
+
+
+        .message-text {
+            font-size: 25px;
+            margin-top: 5px;
+        }
+
+        .message-sender {
+            font-size: 25px;
+            font-weight: bold;
+            text-align: left;
+            color: #888;
+
+        }
+
+        hr {
+            border: none;
+            border-top: 1px dotted #999;
+            margin: 20px 0;
+        }
+
+        dialog {
+            border-color: red;
+        }
+
+        dialog button {
+            font-size: medium;
+            padding: 5px;
+            width: 100px;
+        }
+
+        dialog .dialog-content-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="chat-container">
+        <div class="sidebar">
+            <h2>Chats</h2>
+            <div class="sidebar_list">
+                <div class="sidebar_list_item" onclick="loadMessages(0)">
+                    Live
+                </div>
+                <hr>
+                <div class="sidebar_list_item" onclick="loadMessages(8)">
+                    Test Scenario - Safe
+                </div>
+                <div class="sidebar_list_item" onclick="loadMessages(1)">
+                    Test Scenario - Self Harm
+                </div>
+                <div class="sidebar_list_item" onclick="loadMessages(2)">
+                    Test Scenario - Harassment
+                </div>
+                <!-- <div class="sidebar_list_item" onclick="loadMessages(3)">
+                    Test Scenario - Sexual Content
+                </div> -->
+                <!-- <div class="sidebar_list_item" onclick="loadMessages(4)">
+                    Test Scenario - Violence
+                </div> -->
+                <div class="sidebar_list_item" onclick="loadMessages(5)">
+                    Test Scenario - Threatening
+                </div>
+                <div class="sidebar_list_item" onclick="loadMessages(6)">
+                    Test Scenario - Grooming
+                </div>
+                <div class="sidebar_list_item" onclick="loadMessages(7)">
+                    Test Scenario - Slang & Emojis
+                </div>
+            </div>
+        </div>
+        <div class="chat-main">
+            <div class="chat-messages" id="chat-messages"></div>
+            <div class="chat-input-wrappper">
+                <div class="chat-input">
+                    <input type="text" id="Alice-input" placeholder="Type a message from Alice..." />
+                    <button onclick="sendMessage('Alice')">Send</button>
+                </div>
+                <div class="chat-input">
+                    <input type="text" id="Bob-input" placeholder="Type a message from Bob..." />
+                    <button onclick="sendMessage('Bob')">Send</button>
+                </div>
+            </div>
+        </div>
+
+        <dialog>
+            <div class="dialog-content-wrapper">
+                <h1>⚠️ Dangerous Content Detected</h1>
+                <p>Please notify a parent or trusted adult immediately.</p>
+                <button>Close</button>
+            </div>
+        </dialog>
+    </div>
+
+    <script>
+        async function loadMessages(scenario) {
+            document.querySelectorAll('.message').forEach(el => el.remove());
+            const res = await fetch(`/api/messages/${scenario}/`);
+            const messages = await res.json();
+            messages.forEach(msg => renderMessage(msg.sender, msg.text, preset_message = true));
+        }
+
+        function renderMessage(sender, text, preset_message = false) {
+            const messageEl = document.createElement('div');
+            messageEl.setAttribute("data-preset_message", preset_message);
+            messageEl.className = 'message' + (sender === 'Bob' ? ' bob' : ' alice');
+            messageEl.id = `msg-${Date.now()}-${Math.floor(Math.random() * 1000)}-${(sender === 'Bob' ? 'bob' : 'alice')}`;
+            messageEl.innerHTML = `
+    <div class="message-bubble">
+        <div class="message-sender">${sender}</div>
+        <div class="message-text">${text}</div>
+        
+    </div>
+`;
+            document.getElementById('chat-messages').appendChild(messageEl);
+        }
+
+        function sendMessage(sender) {
+            const input = document.getElementById(`${sender}-input`);
+            const messageText = input.value.trim();
+            if (!messageText) return;
+            renderMessage(sender, messageText);
+            input.value = '';
+            input.focus();
+            document.getElementById('chat-messages').scrollTop = document.getElementById('chat-messages').scrollHeight;
+        }
+
+
+        document.addEventListener('keydown', function (event) {
+            if (event.key === 'Enter' && document.activeElement.id === 'Alice-input') {
+                sendMessage('Alice');
+            }
+            else if (event.key === 'Enter' && document.activeElement.id === 'Bob-input') {
+                sendMessage('Bob');
+            }
+        });
+    </script>
+
+    <script>
+        const dialog = document.querySelector("dialog");
+        const closeButton = document.querySelector("dialog button");
+
+        closeButton.addEventListener("click", () => {
+            dialog.close();
+        });
+    </script>
+
+</body>
+
+</html>

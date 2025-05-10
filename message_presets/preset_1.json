@@ -1,0 +1,8 @@
+[
+  { "sender": "Alice", "text": "Bob, I need to talk. I’ve been feeling completely worthless." },
+  { "sender": "Bob", "text": "I’m really sorry you’re going through that. What’s on your mind?" },
+  { "sender": "Alice", "text": "Every time I look in the mirror, I hate what I see. I just want the pain to stop." },
+  { "sender": "Bob", "text": "You’re not alone. Have you thought about talking to a therapist?" },
+  { "sender": "Alice", "text": "I don’t know if it would help. Sometimes I think slicing my wrists might be the only way out." },
+  { "sender": "Bob", "text": "Please don’t do that. I care about you—let’s call someone right now or go to the hospital." }
+]
